@@ -1,8 +1,6 @@
-#!/usr/bin/env perl
-use 5.24.0;
-use experimental 'signatures';
 use React;
 use Mojo::SlackRTM;
+use experimental 'signatures';
 
 my $slack = Mojo::SlackRTM->new(token => $ENV{SLACK_TOKEN});
 $slack->connect;

@@ -2,7 +2,6 @@ use 5.24.0;
 
 package React {
     use experimental 'signatures';
-
     sub import {
         my $caller = caller;
         {
@@ -13,12 +12,11 @@ package React {
         require feature;
         feature->import(":5.24");
     }
-
     sub whenever ($supply, $callback) {
         $supply->($callback);
     }
-    sub react ($cb) :prototype(&) {
-        $cb->();
+    sub react ($callback) :prototype(&) {
+        $callback->();
         Mojo::IOLoop->start unless Mojo::IOLoop->is_running;
     }
 }
@@ -26,10 +24,8 @@ package React {
 package Mojo::SlackRTM {
     use experimental 'signatures';
     sub subscribe ($self, $event) {
-        sub {
-            my $callback = shift;
-            $self->on($event, sub {
-                my ($self, $message) = @_;
+        sub ($callback) {
+            $self->on($event, sub ($self, $message) {
                 $callback->($message);
             });
         };
